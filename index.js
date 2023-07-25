@@ -17,14 +17,25 @@
  */
 
 // Створюємо об'єкт Book
+let Book = {
+  title: "Загальна Книга",
+  author: "Анонім",
+  pages: 0,
+  read() {
+    console.log(`Ви читаєте ${this.title} від ${this.author}`);
+  },
+};
 
 console.log("Завдання: 1 ==============================");
 
 // Виводимо в консоль Об'єкт: Book
+console.log(Book);
 
 // Виводимо в консоль прототип Об'єкту: Book
+console.log(Object.getPrototypeOf(Book));
 
 // Викликаємо функцію read об'єкту Book
+console.log(Book.read());
 
 // 2. Наслідування від базового об'єкту Book
 
@@ -38,14 +49,18 @@ console.log("Завдання: 1 ==============================");
  */
 
 // Створюємо об'єкт Novel, наслідуємо властивості і функції від об'єкта Book
+let Novel = Object.create(Book);
 
 // Додаємо властивість genre
+Novel.genre = "";
 
 console.log("Завдання: 2 ==============================");
 
 // Виводимо в консоль Об'єкт: Novel
+console.log(Novel);
 
 // Виводимо в консоль прототип Об'єкту: Novel
+console.log(Object.getPrototypeOf(Novel));
 
 // 3. Створення нового об'єкту та зміна його прототипу
 
@@ -61,13 +76,21 @@ console.log("Завдання: 2 ==============================");
  */
 
 // Створюємо об'єкт Biography
+let Biography = {
+  title: "Загальна Біографія",
+  author: "Біограф",
+  pages: 200,
+};
 
 // Змінемо прототип об'єкта Biography на Novel
+Object.setPrototypeOf(Biography, Novel);
 
 console.log("Завдання: 3 ==============================");
 // Виводимо в консоль Об'єкт: Biography
+console.log(Biography);
 
 // Перевіримо чи являється Novel прототипом Biography та виведемо в консоль
+console.log(Object.getPrototypeOf(Biography) === Novel);
 
 // 4. Інкапсуляція властивості та додання властивості
 /*
@@ -77,12 +100,33 @@ console.log("Завдання: 3 ==============================");
  */
 
 // Створюємо ScienceBook, наслідуємо властивості і функції від об'єкта Book
+let ScienceBook = Object.create(Book);
 
 // Додаємо властивість 'info' за допомогою Object.defineProperty
+Object.defineProperty(ScienceBook, "info", {});
+
 // Зробимо щоб 'info' не можно було видалити або змінити, перевіримо і спробуємо присвоїти ій будь яке значення (це потрібно робити ззовні defineProperty),
+Object.defineProperty(ScienceBook, "info", {
+  configurable: false,
+});
+try {
+  console.log((ScienceBook.info = ""));
+  throw new Error("Властивість info заблокована на зміни!");
+} catch (error) {
+  console.log(error.message);
+}
+
 // Отримаємо помилку Cannot assign to read only property 'info' of object '#<Object>'
 
 // Далі створюємо сетер який присвоє властивості info значення яке отримує при виклику, помилку більше не отримуємо але при спробі вивести значення info отримуємо undefined
+Object.defineProperty(ScienceBook, "info", {
+  get() {
+    this.info = "radian";
+  },
+  set(value) {
+    this.info = value;
+  },
+});
 
 // Створимо гетер який буде нам повертати рядок: Про книгу <title>: <info>
 // тепер все виводить коректно
