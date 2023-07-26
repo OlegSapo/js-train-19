@@ -116,7 +116,7 @@ Object.defineProperty(ScienceBook, "info", {
 
 // Отримаємо помилку Cannot assign to read only property 'info' of object '#<Object>'
 try {
-  ScienceBook.info = "";
+  ScienceBook.info = "hello";
   throw new Error("Властивість info заблокована для зміни!");
 } catch (error) {
   console.log(error.message);
@@ -124,6 +124,7 @@ try {
 
 // Далі створюємо сетер який присвоє властивості info значення яке отримує при виклику, помилку більше не отримуємо але при спробі вивести значення info отримуємо undefined
 Object.defineProperty(ScienceBook, "info", {
+  configurable: false,
   set(value) {
     this.info = value;
   },
