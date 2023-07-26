@@ -103,30 +103,36 @@ console.log(Object.getPrototypeOf(Biography) === Novel);
 let ScienceBook = Object.create(Book);
 
 // Додаємо властивість 'info' за допомогою Object.defineProperty
-Object.defineProperty(ScienceBook, "info", {});
+Object.defineProperty(ScienceBook, "info", {
+  value: "INFO",
+});
+// console.log(ScienceBook.info);
 
 // Зробимо щоб 'info' не можно було видалити або змінити, перевіримо і спробуємо присвоїти ій будь яке значення (це потрібно робити ззовні defineProperty),
 Object.defineProperty(ScienceBook, "info", {
   configurable: false,
+  // readable: true,
 });
+
+// Отримаємо помилку Cannot assign to read only property 'info' of object '#<Object>'
 try {
-  console.log((ScienceBook.info = ""));
-  throw new Error("Властивість info заблокована на зміни!");
+  ScienceBook.info = "";
+  throw new Error("Властивість info заблокована для зміни!");
 } catch (error) {
   console.log(error.message);
 }
 
-// Отримаємо помилку Cannot assign to read only property 'info' of object '#<Object>'
-
 // Далі створюємо сетер який присвоє властивості info значення яке отримує при виклику, помилку більше не отримуємо але при спробі вивести значення info отримуємо undefined
 Object.defineProperty(ScienceBook, "info", {
-  get() {
-    this.info = "radian";
-  },
   set(value) {
     this.info = value;
   },
+  get() {
+    return `info: ${this.info}`;
+  },
 });
+ScienceBook.info = "hello";
+console.log(ScienceBook.info);
 
 // Створимо гетер який буде нам повертати рядок: Про книгу <title>: <info>
 // тепер все виводить коректно
